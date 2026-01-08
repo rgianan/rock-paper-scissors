@@ -1,12 +1,10 @@
-let score = JSON.parse(localStorage.getItem('score'));
-
-if (!score) {
-  score = {
+let score = JSON.parse(localStorage.getItem('score')) || {
     playerScore: 0,
     cpuScore: 0,
     tie: 0
-  };
-}
+  }
+
+
 
 let result = ''
 
