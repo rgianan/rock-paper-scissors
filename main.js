@@ -1,4 +1,13 @@
 let score = JSON.parse(localStorage.getItem('score'));
+
+if (!score) {
+  score = {
+    playerScore: 0,
+    cpuScore: 0,
+    tie: 0
+  };
+}
+
 let result = ''
 
 console.log(score);
@@ -71,8 +80,11 @@ function reset() {
   score.playerScore = 0;
   score.cpuScore = 0;
   score.tie = 0;
+  localStorage.removeItem('score');
+
+
   displayScores();
-  console.clear();
+
   alert('Game restarted. Scores reset');
 }
 
@@ -82,6 +94,5 @@ function loadScores () {
     document.getElementById('cs').textContent = score.cpuScore;
     document.getElementById('t').textContent = score.tie; });
 }
-
 
 loadScores();
