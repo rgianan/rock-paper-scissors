@@ -1,68 +1,87 @@
-let playerScore = 0;
-let cpuScore = 0;
-let tie = 0;
+let score = JSON.parse(localStorage.getItem('score'));
+let result = ''
 
-let cpuPick = '';
-let result = '';
+console.log(score);
 
-function roll () {
-const numberRandom = Math.random();
- if (numberRandom >= 0 && numberRandom <= 1/3)
-      {
-      cpuPick = 'Rock';
-      } 
-      else if (numberRandom > 1/3 && numberRandom < 2/3)
-      {
-      cpuPick = 'Paper'
-      }
-      else if (numberRandom < 1 && numberRandom >= 2/3)
-      {
-      cpuPick = 'Scissors' ; 
-      }
-    console.log(numberRandom)
-}
 
-function pick (playerPick) {
-  roll();
-  if (playerPick === 'rock')
-    if (cpuPick === 'Rock') {
-      result = 'Tie.';
-      tie++;
-    } else if (cpuPick === 'Paper') {
-      result = 'You lose.';
-      cpuScore++;
-    } else if (cpuPick === 'Scissors') {
-      result = 'You win.';
-      playerScore++;
-  } else if  (playerPick === 'paper') {
-    if (cpuPick === 'Rock') {
-      result = 'You win.';
-      playerScore++;
-    } else if (cpuPick === 'Paper') {
-      result = 'Tie.';
-      tie++;
-    } else if (cpuPick === 'Scissors') {
-      result = 'You lose.';
-      cpuScore++;
+
+function pick (playerPick) {   //parameter
+  const cpuPick = roll();
+  if(playerPick === 'Rock') {
+    if (cpuPick === "Rock") {
+      result='It\'s a tie';
+      score.tie++;
+    } else if (cpuPick === "Paper") {
+      result='You lose';
+      score.cpuScore++;
+    } else if (cpuPick === "Scissors") {
+      result='You win';
+      score.playerScore++;
     }
-  } else if (playerPick === 'scissors') {
-      if (cpuPick === 'Rock') {
-      result = 'You lose.';
-      cpuScore++;
-    } else if (cpuPick === 'Paper') {
-      result = 'You win.';
-      playerScore++;
-    } else if (cpuPick === 'Scissors') {
-      result = 'Tie.';
-      tie++;
+  } else if(playerPick === 'Paper') {
+    if (cpuPick === "Rock") {
+      result='You win';
+      score.playerScore++;
+    } else if (cpuPick === "Paper") {
+      result='It\'s a tie';
+      score.tie++;
+    } else if (cpuPick === "Scissors") {
+      result='You lose';
+      score.cpuScore++;
+    }
+  } else if(playerPick === 'Scissors') {
+    if (cpuPick === "Rock") {
+      result='You lose';
+      score.cpuScore++;
+    } else if (cpuPick === "Paper") {
+      result='You win';
+      score.playerScore++;
+    } else if (cpuPick === "Scissors") {
+      result='It\'s a tie';
+      score.tie++;
     }
   }
+  alert(`You picked ${playerPick}. Computer picked ${cpuPick}. ${result} 
+    Wins: ${score.playerScore}, Loses: ${score.cpuScore}, Ties: ${score.tie}`);
+    localStorage.setItem('score', JSON.stringify(score));
+  displayScores();
+}
 
-  alert(`You picked ${playerPick}. Computer picked ${cpuPick}. ${result}`);
-  dispResult();
+function roll () {
+  const randomNumber = Math.random();
+  let cpuPick = ''
+    if (randomNumber >= 0 && randomNumber < 1 / 3) {
+      cpuPick = "Rock";
+    } else if (randomNumber >= 1/3 && randomNumber < 2 / 3) {
+      cpuPick = "Paper";
+    } else if (randomNumber >= 2/3 && randomNumber <1) {
+      cpuPick = "Scissors";
+    }
+  console.log(randomNumber);
+  return cpuPick;   //return
 }
-function dispResult () {
-  document.getElementById('ps').textContent = playerScore;
-  document.getElementById('cs').textContent = cpuScore;
-  document.getElementById('t').textContent = tie;
+
+function displayScores () {
+    document.getElementById('ps').textContent = score.playerScore;
+    document.getElementById('cs').textContent = score.cpuScore;
+    document.getElementById('t').textContent = score.tie;
 }
+
+function reset() {
+  score.playerScore = 0;
+  score.cpuScore = 0;
+  score.tie = 0;
+  displayScores();
+  console.clear();
+  alert('Game restarted. Scores reset');
+}
+
+function loadScores () {
+  document.addEventListener('DOMContentLoaded', (event) => {
+    document.getElementById('ps').textContent = score.playerScore;
+    document.getElementById('cs').textContent = score.cpuScore;
+    document.getElementById('t').textContent = score.tie; });
+}
+
+
+loadScores();
